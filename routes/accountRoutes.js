@@ -1,5 +1,6 @@
 import express from 'express';
 import verifyToken from '../middleware/auth.js';
+import bookingRoutes from './bookings.js';
 import db from '../db.js';
 
 const router = express.Router();
@@ -19,5 +20,9 @@ router.get('/', verifyToken, async (req, res) => {
 		res.status(500).json({ message: 'Internal server error' });
 	}
 });
+
+// Nest the booking routes
+router.use('/bookings', bookingRoutes);
+
 
 export default router;
