@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from "cors";
 import authRoutes from './routes/authRoutes.js';
 import accountRoutes from './routes/accountRoutes.js';
 import treatmentsRoutes from './routes/treatments.js';
@@ -7,6 +8,9 @@ import treatmentsRoutes from './routes/treatments.js';
 dotenv.config();
 const app = express();
 const port = 3000;
+
+// CORS fix
+app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());
