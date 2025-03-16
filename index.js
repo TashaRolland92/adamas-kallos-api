@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import cors from "cors";
 import authRoutes from './routes/authRoutes.js';
 import accountRoutes from './routes/accountRoutes.js';
-import treatmentsRoutes from './routes/treatments.js';
+import categoriesRoutes from './routes/categories.js';
+import subcategoriesRoutes from './routes/subcategories.js';
+import treatmentRoutes from './routes/treatments.js';
 
 dotenv.config();
 const app = express();
@@ -18,7 +20,9 @@ app.use(express.json());
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/account', accountRoutes);
-app.use('/api/treatments', treatmentsRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/subcategories', subcategoriesRoutes);
+app.use('/api/treatments', treatmentRoutes);
 
 
 // Start the server
