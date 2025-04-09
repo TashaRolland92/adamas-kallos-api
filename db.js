@@ -1,10 +1,10 @@
 import mysql from 'mysql2/promise';
 
 const db = await mysql.createConnection({
-    host: 'localhost',      // Or your MySQL host
-    user: 'root',           // Your MySQL username
-    password: 'BlueDiamond123#',  // Your MySQL password
-    database: 'adamas_kallos_db' // Your DB name
+    host: process.env.DB_HOST,      // Or your MySQL host
+    user: process.env.DB_USER,           // Your MySQL username
+    password: process.env.DB_PASSWORD,  // Your MySQL password
+    database: process.env.DB_NAME // Your DB name
 });
 
 export default db;
