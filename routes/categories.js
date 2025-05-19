@@ -7,7 +7,15 @@ const router = express.Router();
 router.get("/", async (req, res) => {
 	try {
 		const [categories] = await db.query("SELECT * FROM treatment_categories");
-		res.json(categories);
+
+		// Map and convert has_subcategories from number to boolean
+		const formattedCategories = categories.map(category => ({
+			...category,
+			has_subcategories: Boolean(category.has_subcategories)
+		}));
+
+		res.json(formattedCategories);
+
 	} catch (err) {
 		console.error("Error fetching categories:", err);
 		res.status(500).json({ message: "Internal server error" });
