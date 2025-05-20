@@ -54,12 +54,33 @@ router.get("/:category_id/subcategories", async (req, res) => {
 router.get("/:category_id/treatments", async (req, res) => {
 	try {
 		const { category_id } = req.params;
-		const [treatments] = await db.query(`
-			SELECT t.id, t.name, t.description, s.name AS subcategory
-			FROM treatments t
-			LEFT JOIN treatment_subcategories s ON t.subcategory_id = s.id
-			WHERE t.category_id = ?
-		`, [category_id]);
+		const { subcategory_id } = req.query;
+		let sql = `
+			SELECT
+				t.id,
+				t.name,
+				t.description,
+                t.price,
+                t.duration,
+                t.subcategory_id,
+                t.category_id,
+				s.name AS subcategory_name
+			FROM
+				treatments t
+			LEFT JOIN
+				treatment_subcategories s ON t.subcategory_id = s.id
+			WHERE
+				t.category_id = ?
+		`;
+
+		const params = [category_id];
+
+		if(subcategory_id){
+			sql += ` AND t.subcategory_id = ?`;
+			params.push(subcategory_id);
+		}
+
+		const [treatments] = await db.query(sql, params);
 
 		res.json(treatments);
 	} catch (err) {
@@ -67,21 +88,3 @@ router.get("/:category_id/treatments", async (req, res) => {
 		res.status(500).json({ message: "Internal server error" });
 	}
 });
-
-// Get treatments in a subcategory
-router.get("/:category_id/subcategories/:subcategory_id/treatments", async (req, res) => {
-	try {
-		const { category_id, subcategory_id } = req.params;
-		const [treatments] = await db.query(`
-			SELECT t.id, t.name, t.description, t.price, t.duration
-			FROM treatments t
-			WHERE t.category_id = ? AND t.subcategory_id = ?
-		`, [category_id, subcategory_id]);
-		res.json(treatments);
-	} catch (err) {
-		console.error("Error fetching treatments:", err);
-		res.status(500).json({ message: "Internal server error" });
-	}
-});
-
-export default router;
