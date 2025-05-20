@@ -19,23 +19,6 @@ router.get("/", async (req, res) => {
 	}
 });
 
-// Get treatments in a subcategory
-router.get("/:category_id/subcategories/:subcategory_id/treatments", async (req, res) => {
-	try {
-		const { category_id, subcategory_id } = req.params;
-		const [treatments] = await db.query(`
-			SELECT t.id, t.name, t.description
-			FROM treatments t
-			WHERE t.category_id = ? AND t.subcategory_id = ?
-		`, [category_id, subcategory_id]);
-
-		res.json(treatments);
-	} catch (err) {
-		console.error("Error fetching treatments:", err);
-		res.status(500).json({ message: "Internal server error" });
-	}
-});
-
 // Get a single treatment
 router.get("/:treatment_id", async (req, res) => {
 	try {

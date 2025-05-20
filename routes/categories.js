@@ -68,21 +68,18 @@ router.get("/:category_id/treatments", async (req, res) => {
 	}
 });
 
-// Get treatments in a specific subcategory
-router.get("/:category_id/subcategories/:subCategory_id/treatments", async (req, res) => {
+// Get treatments in a subcategory
+router.get("/:category_id/subcategories/:subcategory_id/treatments", async (req, res) => {
 	try {
-		const { category_id, subCategory_id } = req.params;
+		const { category_id, subcategory_id } = req.params;
 		const [treatments] = await db.query(`
-			SELECT t.id, t.name, t.description
+			SELECT t.id, t.name, t.description, t.price, t.duration
 			FROM treatments t
 			WHERE t.category_id = ? AND t.subcategory_id = ?
-		`, [category_id, subCategory_id]);
-
-		if (treatments.length === 0) return res.status(404).json({ message: "No treatments found in this subcategory" });
-
+		`, [category_id, subcategory_id]);
 		res.json(treatments);
 	} catch (err) {
-		console.error("Error fetching treatments in subcategory:", err);
+		console.error("Error fetching treatments:", err);
 		res.status(500).json({ message: "Internal server error" });
 	}
 });
